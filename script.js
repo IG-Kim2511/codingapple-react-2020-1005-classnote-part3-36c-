@@ -285,3 +285,52 @@ function Component() {
     </div>
   )
 } 
+
+//🦄38 성능잡기1. lazy loading / React devtools
+// → 캡쳐정리 확인
+
+// (1) 함수나 오브젝트는 변수에 담아쓰는게 좋습니다.
+
+// (2) 애니메이션 줄 때  width, margin, padding, left right top bottom은 좋지않음
+
+// 애니메이션을 넣어도 성능에 큰 지장이 없게 만들고 싶으면
+// transform, opacity 같은 CSS 속성을 이용해 애니메이션을 주길 바랍니다.
+// transform은 사이즈 변경, 좌표이동, 회전 전부 가능한 좋은 속성입니다.
+
+// (3) 컴포넌트 import 할 때 lazy 하게 import 하는 법
+// 많은 컴포넌트파일을 import 해오라고 써놓으면 사이트 초기 접속속도가 굉장히 느려질 수 있습니다. 
+
+// (3-2)“Detail, Cart 컴포넌트들이 필요해질 때 import를 해주세요~” 라고 코드를 작성하실 수도 있습니다. 
+// 1. react 라이브러리에서 lazy, Suspense를 import 해오시고
+
+// 2. import Detail 하던걸 lazy 함수를 이용해 저렇게 바꿔줍니다. 
+let Detail 
+lazy(( )=>{return })
+import( )
+
+// 3. <Suspense> 라는 컴포넌트로 <Detail>을 감싸줍니다.
+// 4. fallback 속성엔 <Detail> 컴포넌트 로딩 전까지 띄울 원하는 HTML을 적어줍니다.
+
+import React, {useState, useContext, lazy, Suspense} from 'react';
+
+let Detail = lazy( ()=>{ return import('./Detail.js') } );
+
+render (  
+  <Suspense fallback={ <div>로딩중입니다~!</div> }>
+    <Detail/>
+  </Suspense>
+)
+
+// (4) React Dev Tools 크롬 확장프로그램 
+// 크롬브라우저에서 우클릭 – 검사
+// 1.Components 클릭해보면 거기서 사용중인 props, state, hook 이런 것들이 우측에 쫘르륵 표기됩니다.
+ 
+// – 그래서 props가 잘 전해졌는지 확인
+// – state가 잘 변하고 있는지 확인
+// – 실시간 state, props 수정해보기
+// – 시계모양 버튼을 눌러 해당 컴포넌트 렌더링을 잠깐 정지해보기
+
+//2 Profiler 탭으로 들어가시면
+// 녹화 버튼(파란점) 을 눌러서 컴포넌트 렌더링 되는 속도를 측정해볼 수 있습니다.
+// 1. 버튼 누르고 2. 사이트 탐색하고 3. 버튼 다시 누르면 녹화 끝입니다.
+
