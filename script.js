@@ -8,14 +8,24 @@
 // →→ Detail35.js
 // →→ Cart36.js
 
-// ⚡(1) 메인페이지의 <Card>를 클릭, 상세페이지 이동시키자
+// ⚡(1) Apps.js 메인페이지의 <Card>를 클릭, 상세페이지 이동시키자
 // 이거 어떻게 합니까. 그냥 router 시간에 배웠던거 활용하면 되겠죠?
 // history.push(‘/detail’) 이런거 쓰면 페이지 이동된다고 했으니
 
 // 1. <Card> 써있는 곳에다가 onClick 일 때 저거 동작시키면 되겠네요? - 안됨
-// 왜냐면 <컴포넌트>는 div가 아니라 JS이라서, onClick 속성을 달아도 동작안됨
+// 왜냐면 <컴포넌트>는 div가 아니라 JS이라서, onClick 속성을 달아도 동작안됨 
+// ⊗
+<Card36  onClick={}></Card36>  
 
 // 2. 그냥 <Card> 컴포넌트를 정의한 곳으로 가서 div에 직접 onClick을 사용.
+
+function Card(props){
+  let history = useHistory();
+  return(
+ // ⨀
+    <div onClick={()=>{ history.push('/detail/'+ props.shoes.id) }}>gogo</div>
+  )
+}
 
 // 3. 근데 지금은 모든 <Card> 컴포넌트를 클릭하면 /detail/0 으로 이동시키라고 하드코딩 해놨는데
 
@@ -27,16 +37,6 @@
 // 그럼 이제 각각 /detail/0, /detail/1 이렇게 다른 페이지로 이동시켜주겠군요.
 // ⭐뭔말 하는지 모르겠으면 위의 코드해석하려하지말고, <Card>안에 있는 props부터 콘솔창에 출력해봅시다.
 
-//(1) Apps.js
-
-<Card36  onClick={}></Card36>  → ⊗
-
-function Card(props){
-  let history = useHistory();
-  return(
-    <div onClick={()=>{ history.push('/detail/'+ props.shoes.id) }}>gogo</div>
-  )
-}
 
 
 // ⚡(2) 장바구니에 있는 + 버튼을 누르면 지금 맨 위의 첫째 상품의 수량만 ++ 되고 있습니다.
@@ -223,9 +223,14 @@ function reducer(state, 액션){
   }
 }
 
-// ???
-// 5. 오브젝트 자료형을 응용한 enum
 
+// 5. 오브젝트 자료형을 응용한 enum (enumerations: (하나하나)세는것 ,목록 )
+// (1) (내 생각)
+// var 현재상태 는  dispatch로 전송해온 데이터a로 대체됨
+// -> enum으로 array,  object에 담은 데이터b에서 
+// ->전송해온 데이터a=array안의 데이터b 맞는것  출력
+
+// (2)
 // 예를 들면 쇼핑몰에서 상품설명부분을 탭으로 만든다고 합시다.
 // 탭안에는 뭐 경우에 따라서 상품정보 /배송정보 /환불약관 이런걸 보여줘야합니다.
 
@@ -262,6 +267,8 @@ function Component() {
 // 아주 간단하고 직관적인 if문이 완성되었습니다.
 // 이제 if/else 몰라도 코딩이 가능하겠군요
 
+
+//( 같은 코딩. 좀더 깔끔하게 정리)
 var 탭UI = { 
   info : <p>상품정보</p>,
   shipping : <p>배송관련</p>,
@@ -278,4 +285,3 @@ function Component() {
     </div>
   )
 } 
-// ▲ 뭔가 매우 깔끔해졌습니다.
