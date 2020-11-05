@@ -336,20 +336,54 @@ render (
 
 
 // 🦄39 성능잡기2. 쓸데없는 재렌더링을 막는 memo( )
-// 예시용으로 코딩
+// 컴포넌트는 컴포넌트와 관련된 state 혹은 props가 변경되면 항상 자동 재렌더링됩니다.
+// 근데 가끔가다가 가만히 있어야할 컴포넌트들도 이유없이 재렌더링되는 경우가 있습니다.
 
+// 특히 컴포넌트안에 컴포넌트가 여러개 있을 때,
+// 부모 컴포넌트의 props 내용이 일부 변경되면 props를 전송받고 있는 자식 컴포넌트들도 전부 재렌더링됩니다.
+
+// props 변동사항이 없는 가만히 있던 자식 컴포넌트들도 싸그리 다 재렌더링되는데  
+// 이런거 그냥 냅두시면 사이트 구동 속도가 저하될 수 있겠죠?
+// memo라는 함수로 한번 해결해봅시다.
+
+
+// (2) 예시용으로 코딩
+
+//(3) 존박에서 존박1로 변경해봅시다.
+// 그러자마자 <Child1><Child2> 이 두개의 컴포넌트가 재렌더링됩니다.
+// ▲ (렌더링될 때마다 콘솔창에 뭐 출력하라고 useEffect()를 썼으니 저렇게 나오는 것입니다)
+
+// (4) memo()
+// memo라는걸로 감싸시면 memo( )로 감싼 컴포넌트와 관련된 props가 변경된때에만 재랜더링이  됨
+
+// 1.import { memo } from'react'
+// 2. memo()로 원하는 컴포넌트 감싸기.
+
+// 2-1. memo( );로 function( ) 감쌈
+// 2-2. let 변수화 (let변수화를 해야만 memo로 감쌀 수 있음)
+
+// (5)
+// 아무튼 이게 컴포넌트가 너무 크거나 해서 잦은 재렌더링이 부담스러울 때 쓰는 방법입니다.
+// props가 크고 복잡하면 이거 자체로도 부담이 될 수도 있습니다.
+// 리액트 개발자도구에서 렌더링속도 측정해보신 후에 쓸지 말지 고민해보십시오.
+// 그리고 역시나 쪼그만한 사이트 만들 땐 전혀 필요없습니다.
+
+// (4)-1
 import React, {useEffect, memo} from 'react';
 
 function Cart(){
   return (
+    // (2) Component parent 호출
     <Parent 이름="존박" 나이="20"/>
+    // (3)
+    // <Parent 이름="존박" 나이="20"/>
   )
 }
 
 function Parent(props){
   return (
     <div>
-    // Component Child 호출
+    // (2) Component Child 호출
       <Child1 이름={props.존박} />
       <Child2 나이={props.나이} />
     <div>
@@ -359,6 +393,7 @@ function Child1(){
   useEffect( ()=>{ console.log('렌더링됨1') } );
   return <div>1111</div>
 }
+// (4)-2
 let Child2 = memo(function(){
   useEffect( ()=>{ console.log('렌더링됨2') } );
   return <div>2222</div>
