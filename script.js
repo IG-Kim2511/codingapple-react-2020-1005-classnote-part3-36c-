@@ -1,4 +1,4 @@
-"use strict";
+
 // ● ⭐⚡😀🦄👻👽🍉🍒🌈🔥
 
 
@@ -334,3 +334,32 @@ render (
 // 녹화 버튼(파란점) 을 눌러서 컴포넌트 렌더링 되는 속도를 측정해볼 수 있습니다.
 // 1. 버튼 누르고 2. 사이트 탐색하고 3. 버튼 다시 누르면 녹화 끝입니다.
 
+
+// 🦄39 성능잡기2. 쓸데없는 재렌더링을 막는 memo( )
+// 예시용으로 코딩
+
+import React, {useEffect, memo} from 'react';
+
+function Cart(){
+  return (
+    <Parent 이름="존박" 나이="20"/>
+  )
+}
+
+function Parent(props){
+  return (
+    <div>
+    // Component Child 호출
+      <Child1 이름={props.존박} />
+      <Child2 나이={props.나이} />
+    <div>
+  )
+}
+function Child1(){
+  useEffect( ()=>{ console.log('렌더링됨1') } );
+  return <div>1111</div>
+}
+let Child2 = memo(function(){
+  useEffect( ()=>{ console.log('렌더링됨2') } );
+  return <div>2222</div>
+})
